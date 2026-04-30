@@ -9,21 +9,21 @@ namespace Metier
     public class Case
     {
         private int ligne;
-        private int clolone;
+        private int colonne;
         private int valeur;
-        private bool affiche
+        private bool affiche;
 
-        public int Ligne { get; }
-        public int Colonne { get; }
-        public int Valeur { get; }
-        public bool Affiche { get; }
+        public int Ligne { get { return ligne; } }
+        public int Colonne { get { return colonne; } }
+        public int Valeur { get { return valeur; } }
+        public bool Affiche { get { return affiche; } }
 
         public Case(int ligne, int colonne, int valeur, bool affiche)
         {
             this.ligne = ligne;
-            this.Colonne = colonne;
-            this.Valeur = valeur;
-            this.Affiche = affiche;
+            this.colonne = colonne;
+            this.valeur = valeur;
+            this.affiche = affiche;
         }
     }
 }

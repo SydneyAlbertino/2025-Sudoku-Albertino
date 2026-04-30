@@ -8,6 +8,10 @@ namespace Metier
 {
     public class EGrilleCharge : EGrille 
     { 
+        /// <summary>
+        /// Si la grille n'est pas chargé
+        /// </summary>
+        /// <param name="msg"></param>
         public EGrilleCharge(string msg) : base(msg) 
         { 
 
