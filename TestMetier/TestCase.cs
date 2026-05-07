@@ -15,12 +15,13 @@ namespace TestMetier
         [Fact]
         public void ConstructeurClassique()
         {
-            var c = new Case(2, 5, 7, true);
+            var c = new Case(2, 5, 7, true,true);
 
             Assert.Equal(2, c.Ligne);
             Assert.Equal(5, c.Colonne);
             Assert.Equal(7, c.Valeur);
             Assert.True(c.Affiche);
+            Assert.True(c.Initiale);
         }
 
 
@@ -28,7 +29,7 @@ namespace TestMetier
         [Fact]
         public void Case_ProprietesCorrectes_QuandNonAffiche()
         {
-            var c = new Case(0, 0, 0, false);
+            var c = new Case(0, 0, 0, false, true);
 
             Assert.Equal(0, c.Valeur);
             Assert.False(c.Affiche);
@@ -37,7 +38,7 @@ namespace TestMetier
         [Fact]
         public void Case_LigneZero_EstValide()
         {
-            var c = new Case(0, 0, 1, true);
+            var c = new Case(0, 0, 1, true, true);
             Assert.Equal(0, c.Ligne);
         }
 
@@ -45,8 +46,19 @@ namespace TestMetier
         [Fact]
         public void Case_ColonneHuit_EstValide()
         {
-            var c = new Case(0, 8, 9, true);
+            var c = new Case(0, 8, 9, true, true);
             Assert.Equal(8, c.Colonne);
+        }
+
+        [Fact]
+        /// <summary>
+        /// Setter Affiche modifiable
+        /// </summary>
+        public void Case_SetAffiche()
+        {
+            Case c = new Case(0, 0, 5, false, false);
+            c.Affiche = true;
+            Assert.True(c.Affiche);
         }
     }
 }

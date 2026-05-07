@@ -11,21 +11,110 @@ namespace TranspireConsole
     {
         public void AfficherGrille(Grille grille)
         {
-            Console.WriteLine("\u250C" + string.Join("\u252C", Enumerable.Repeat("\u2500\u2500\u2500", grille.Taille)) + "\u2510");
+            Console.Clear();
+
+            int curseurL = grille.Curseur.Ligne;
+            int curseurC = grille.Curseur.Colonne;
+
+  
+            EcrireLigneHorizontale(grille.Taille, 0, curseurL, curseurC, "top");
+
             for (int l = 0; l < grille.Taille; l++)
             {
-                Console.Write("\u2502");
+
+                EcrireSepaVertical(l, -1, curseurL, curseurC);
+
                 for (int c = 0; c < grille.Taille; c++)
                 {
                     var cas = grille.GetCase(l, c);
+                    bool estCurseur = l == curseurL && c == curseurC;
+
+
+                    if (estCurseur)
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    else if (cas.Initiale)
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                    else
+                        Console.ForegroundColor = ConsoleColor.White;
+
                     string val = cas.Affiche ? cas.Valeur.ToString() : " ";
-                    Console.Write($" {val} \u2502");
+                    Console.Write($" {val} ");
+                    Console.ResetColor();
+
+
+                    EcrireSepaVertical(l, c, curseurL, curseurC);
                 }
+
                 Console.WriteLine();
+
+
                 if (l < grille.Taille - 1)
-                    Console.WriteLine("\u251C" + string.Join("\u253C", Enumerable.Repeat("\u2500\u2500\u2500", grille.Taille)) + "\u2524");
+                    EcrireLigneHorizontale(grille.Taille, l + 1, curseurL, curseurC, "mid");
             }
-            Console.WriteLine("\u2514" + string.Join("\u2534", Enumerable.Repeat("\u2500\u2500\u2500", grille.Taille)) + "\u2518");
+
+
+            EcrireLigneHorizontale(grille.Taille, grille.Taille, curseurL, curseurC, "bot");
+
+
+            Console.Write("\nValeur sélectionnée : ");
+            for (int i = 1; i <= grille.Taille; i++)
+            {
+                if (grille.ValeurSelectionne == i)
+                    Console.ForegroundColor = ConsoleColor.Red;
+                else
+                    Console.ForegroundColor = ConsoleColor.White;
+
+                Console.Write(i + " ");
+                Console.ResetColor();
+            }
+            Console.WriteLine();
+        }
+
+        /// <summary>
+        /// Écrit un séparateur en rouge si la case à gauche ou à droite est le curseur.
+        /// colonneGauche = -1 signifie le bord gauche de la grille.
+        /// </summary>
+        private void EcrireSepaVertical(int ligne, int colonneGauche, int curseurL, int curseurC)
+        {
+            bool estRouge = ligne == curseurL &&
+                            (colonneGauche == curseurC || colonneGauche + 1 == curseurC);
+
+            if (estRouge)
+                Console.ForegroundColor = ConsoleColor.Red;
+
+            Console.Write("\u2502");
+            Console.ResetColor();
+        }
+
+        /// <summary>
+        /// Écrit une ligne horizontale (haut/milieu/bas) en coloriant en rouge
+        /// le segment au-dessus ou en-dessous de la case curseur.
+        /// </summary>
+        private void EcrireLigneHorizontale(int taille, int ligneIndex, int curseurL, int curseurC, string type)
+        {
+            char gauche = type == "top" ? '\u250C' : type == "mid" ? '\u251C' : '\u2514';
+            char milieu = type == "top" ? '\u252C' : type == "mid" ? '\u253C' : '\u2534';
+            char droite = type == "top" ? '\u2510' : type == "mid" ? '\u2524' : '\u2518';
+
+            bool ligneEstPresCurseur = ligneIndex == curseurL || ligneIndex == curseurL + 1;
+
+            Console.Write(gauche);
+
+            for (int c = 0; c < taille; c++)
+            {
+                bool segmentRouge = ligneEstPresCurseur && c == curseurC;
+
+                if (segmentRouge)
+                    Console.ForegroundColor = ConsoleColor.Red;
+
+                Console.Write("\u2500\u2500\u2500");
+                Console.ResetColor();
+
+                if (c < taille - 1)
+                    Console.Write(milieu);
+            }
+
+            Console.WriteLine(droite);
         }
     }
 }
