@@ -5,9 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TranspireWpf"
         mc:Ignorable="d"
-        Title="Transpire" Height="500" Width="500">
-    
-    <Grid Margin="20">
+        Title="Transpire" Height="550" Width="600">
+
+    <DockPanel Margin="15">
+
+        <StackPanel DockPanel.Dock="Bottom"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0,10,0,0">
+
+            <TextBlock Text="Valeur sélectionnée:"
+                       VerticalAlignment="Center"
+                       Margin="0,0,10,0"
+                       FontSize="14"/>
+
+            <StackPanel x:Name="PanneauValeurs"
+                        Orientation="Horizontal" />
+
+        </StackPanel>
+
         <Grid x:Name="GrilleWpf" />
-    </Grid>
+
+    </DockPanel>
 </Window>
