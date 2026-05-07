@@ -7,28 +7,33 @@ using Metier;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
+using System.Windows.Input;
+
 
 namespace TranspireWpf
 {
     public class ConsoleWpf : IConsole
     {
-        private readonly Grid _grid;
+        private Grid grid;
+        private Action<int, int> caseClique;
 
-        public ConsoleWpf(Grid grid)
+        public ConsoleWpf(Grid grid, Action<int, int> onCaseCliquee)
         {
-            _grid = grid;
+            this.grid = grid;
+            this.caseClique = onCaseCliquee;
         }
 
         public void AfficherGrille(Grille grille)
         {
-            _grid.Children.Clear();
-            _grid.RowDefinitions.Clear();
-            _grid.ColumnDefinitions.Clear();
+            this.grid.Children.Clear();
+            this.grid.RowDefinitions.Clear();
+            this.grid.ColumnDefinitions.Clear();
+
 
             for (int i = 0; i < grille.Taille; i++)
             {
-                _grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-                _grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                this.grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                this.grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             }
 
             for (int l = 0; l < grille.Taille; l++)
@@ -36,12 +41,14 @@ namespace TranspireWpf
                 for (int c = 0; c < grille.Taille; c++)
                 {
                     Case cas = grille.GetCase(l, c);
+                    bool estCurseur = grille.Curseur.Ligne == l && grille.Curseur.Colonne == c;
 
                     var border = new Border
                     {
-                        BorderBrush = Brushes.Black,
-                        BorderThickness = EpaisseurBordure(l, c),
-                        Background = Brushes.White
+                        BorderBrush = estCurseur ? Brushes.Red : Brushes.Black,
+                        BorderThickness = EpaisseurBordure(l, c, estCurseur),
+                        Background = Brushes.White,
+                        Cursor = Cursors.Hand
                     };
 
                     if (cas.Affiche)
@@ -52,19 +59,31 @@ namespace TranspireWpf
                             HorizontalAlignment = HorizontalAlignment.Center,
                             VerticalAlignment = VerticalAlignment.Center,
                             FontSize = 20,
-                            FontWeight = FontWeights.Bold
+                            FontWeight = FontWeights.Bold,
+                            Foreground = cas.Initiale ? Brushes.RoyalBlue : Brushes.Black
                         };
                     }
 
+                    int ligne = l;
+                    int colonne = c;
+                    border.MouseLeftButtonDown += (s, e) => this.caseClique(ligne, colonne);
+
                     Grid.SetRow(border, l);
                     Grid.SetColumn(border, c);
-                    _grid.Children.Add(border);
+                    this.grid.Children.Add(border);
                 }
             }
         }
 
-        private Thickness EpaisseurBordure(int ligne, int colonne)
+        /// <summary>
+        /// Épaissit les bordures pour délimiter les sous-grilles 3x3.
+        /// Si la case est le curseur, toutes les bordures sont épaisses et rouges.
+        /// </summary>
+        private Thickness EpaisseurBordure(int ligne, int colonne, bool estCurseur)
         {
+            if (estCurseur)
+                return new Thickness(3);
+
             double gauche = (colonne % 3 == 0) ? 3 : 0.5;
             double haut = (ligne % 3 == 0) ? 3 : 0.5;
             double droite = (colonne == 8) ? 3 : 0.5;

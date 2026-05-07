@@ -10,11 +10,26 @@ namespace Metier
     {
         private int taille;
         private Case[,] cases;
-        private readonly IChargeur chargeur;
-        private readonly IConsole console;
+        private IChargeur chargeur;
+        private IConsole console;
         private bool estCharge;
+        private int? valeurSelectionne;
+        private Coordonnees curseur;
 
+        //Taille de la grille
         public int Taille { get { return taille; } }
+        //Indique la valeur que l’ on veut écrire dans la grille
+        public int? ValeurSelectionne { get { return valeurSelectionne; }
+            set 
+            {
+                if (value == null)
+                    throw new EGrilleValeurNulle("La valeur ne peut pas être nulle.");
+                if (value < 1 || value > Taille)
+                    throw new EGrilleValeur($"Valeur {value} hors intervalle.");
+                valeurSelectionne = value;
+            } }
+        //Indique la case ou on veut écrire
+        public Coordonnees Curseur { get { return curseur; } set { curseur = value; } }
 
         /// <summary>
         /// Constructeur
@@ -34,6 +49,7 @@ namespace Metier
             this.console = console;
             this.chargeur = chargeur;
             this.estCharge = false;
+            this.curseur = new Coordonnees(this.taille);
         }
 
 
@@ -81,6 +97,23 @@ namespace Metier
                 throw new EGrilleCharge("La grille n'est pas chargée.");
             }
             console.AfficherGrille(this);
+        }
+
+        /// <summary>
+        /// Ecrit ValeurSelectionne dans la case indiquée par Curseur si c’ est la bonne valeur
+        /// </summary>
+        /// <exception cref="EGrilleValeurNulle">Si la valeur est null</exception>
+        public void MettreValeur()
+        {
+            if (this.valeurSelectionne == null)
+                throw new EGrilleValeurNulle("Aucune valeur sélectionnée.");
+
+            Case c = GetCase(this.curseur.Ligne, this.curseur.Colonne);
+
+            if (!c.Initiale && c.Valeur == this.valeurSelectionne)
+            {
+                c.Affiche = true;
+            }
         }
     }
 }
