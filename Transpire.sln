@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36221.1 d17.14
+VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranspireConsole", "TranspireConsole\TranspireConsole.csproj", "{FC5F476C-F3FD-4D19-B5DD-B68454193DB1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metier", "Metier\Metier.csproj", "{632C6EF9-E767-482A-A67B-4FBBBB419AFA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMetier", "TestMetier\TestMetier.csproj", "{DFB34F48-3647-4009-BD98-1A6467C65E2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranspireWpf", "TranspireWpf\TranspireWpf.csproj", "{9A4D6524-DBC8-4020-97EE-88D25600D411}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{DFB34F48-3647-4009-BD98-1A6467C65E2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFB34F48-3647-4009-BD98-1A6467C65E2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFB34F48-3647-4009-BD98-1A6467C65E2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A4D6524-DBC8-4020-97EE-88D25600D411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A4D6524-DBC8-4020-97EE-88D25600D411}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A4D6524-DBC8-4020-97EE-88D25600D411}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A4D6524-DBC8-4020-97EE-88D25600D411}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
