@@ -41,7 +41,7 @@ namespace Metier
             this.colone = 0;
         }
 
-        public bool Equals(object? obj)
+        public override bool Equals(object? obj)
         {
             return Equals(obj as Coordonnees);
         }
