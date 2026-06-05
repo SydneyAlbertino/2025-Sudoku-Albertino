@@ -15,6 +15,8 @@ namespace Metier
         private int ligne;
         private int colone;
 
+        public int Taille { get { return taille; } }
+
         public int Ligne { get { return ligne; } 
             set 
             {
