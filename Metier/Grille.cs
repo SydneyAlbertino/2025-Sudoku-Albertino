@@ -40,9 +40,9 @@ namespace Metier
         /// <exception cref="EGrilleTaille">Si la taille différente de 9</exception>
         public Grille(int taille, IConsole console, IChargeur chargeur)
         {
-            if (taille != 9)
+            if (taille != 4 && taille != 9 && taille != 16)
             {
-                throw new EGrilleTaille("La taille doit être 9.");
+                throw new EGrilleTaille("La taille doit être 4, 9 ou 16.");
             }
 
             this.taille = taille;
