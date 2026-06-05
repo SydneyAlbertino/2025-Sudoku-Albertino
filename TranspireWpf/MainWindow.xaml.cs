@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Creator.Creator;
 using Metier;
 
 
@@ -22,8 +23,16 @@ namespace TranspireWpf
         {
             InitializeComponent();
 
+            var dialog = new DifficulteDialog();
+            if (dialog.ShowDialog() != true) 
+            { 
+                Close(); return; 
+            }
+
+            int difficulte = dialog.Difficulte;
+
             this.console = new ConsoleWpf(GrilleWpf, OnCaseCliquee);
-            var chargeur = new ChargeurDefaut(9);
+            var chargeur = new ChargeurHasard(9, difficulte);
             this.grille = new Grille(9, this.console, chargeur);
 
             this.grille.Charger();
