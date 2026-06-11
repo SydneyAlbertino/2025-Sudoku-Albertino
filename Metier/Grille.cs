@@ -15,6 +15,7 @@ namespace Metier
         private bool estCharge;
         private int? valeurSelectionne;
         private Coordonnees curseur;
+        private bool choix;
 
         //Taille de la grille
         public int Taille { get { return taille; } }
@@ -50,6 +51,7 @@ namespace Metier
             this.chargeur = chargeur;
             this.estCharge = false;
             this.curseur = new Coordonnees(this.taille);
+            this.choix = false;
         }
 
 
@@ -113,6 +115,66 @@ namespace Metier
             if (!c.Initiale && c.Valeur == this.valeurSelectionne)
             {
                 c.Affiche = true;
+                EnleverChoix();
+            }
+        }
+
+        /// <summary>
+        /// Bascule entre le mode Test et le mode Choix.
+        /// </summary>
+        public void ChangerMode()
+        {
+            this.choix = !this.choix;
+        }
+
+        // <summary>
+        /// Supprime la valeur sélectionnée des choix
+        /// </summary>
+        public void EnleverChoix()
+        {
+            if (this.valeurSelectionne == null)
+            {
+                return;
+            }
+
+            int l = Curseur.Ligne;
+            int c = Curseur.Colonne;
+            int val = this.valeurSelectionne.Value;
+            int sous = (int)Math.Sqrt(Taille);
+
+            foreach (int v in this.cases![l, c].Choix.ToArray())
+            {
+                this.cases[l, c].Choisir(v);
+            }
+
+            for (int col = 0; col < Taille; col++)
+            {
+                if (this.cases[l, col].Choix.Contains(val))
+                {
+                    this.cases[l, col].Choisir(val);
+                }
+            }
+
+            for (int lig = 0; lig < Taille; lig++)
+            {
+                if (this.cases[lig, c].Choix.Contains(val))
+                {
+                    this.cases[lig, c].Choisir(val);
+                }
+            }
+
+            int debutLigne = (l / sous) * sous;
+            int debutColone = (c / sous) * sous;
+
+            for (int dl = debutLigne; dl < debutLigne + sous; dl++)
+            {
+                for (int dc = debutColone; dc < debutColone + sous; dc++)
+                {
+                    if (this.cases[dl, dc].Choix.Contains(val))
+                    { 
+                        this.cases[dl, dc].Choisir(val);
+                    }
+                }
             }
         }
     }
