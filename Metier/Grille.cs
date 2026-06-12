@@ -20,7 +20,10 @@ namespace Metier
         //Taille de la grille
         public int Taille { get { return taille; } }
         //Indique la valeur que l’ on veut écrire dans la grille
-        public int? ValeurSelectionne { get { return valeurSelectionne; }
+        public int? ValeurSelectionne 
+        { 
+            get { return valeurSelectionne; }
+
             set 
             {
                 if (value == null)
