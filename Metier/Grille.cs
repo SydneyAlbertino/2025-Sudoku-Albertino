@@ -28,7 +28,12 @@ namespace Metier
                 if (value < 1 || value > Taille)
                     throw new EGrilleValeur($"Valeur {value} hors intervalle.");
                 valeurSelectionne = value;
-            } }
+            } 
+        }
+
+        //Indique si on est en mode choix ou en mode test
+        public bool Choix { get { return choix; } }
+
         //Indique la case ou on veut écrire
         public Coordonnees Curseur { get { return curseur; } set { curseur = value; } }
 
