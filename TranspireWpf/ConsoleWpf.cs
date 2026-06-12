@@ -63,6 +63,13 @@ namespace TranspireWpf
                             Foreground = cas.Initiale ? Brushes.RoyalBlue : Brushes.Black
                         };
                     }
+                    else
+                    {
+                        if (cas.Choix.Length>0)
+                        {
+                            border.Child = CreerGrilleChoix(cas.Choix);
+                        }
+                    }
 
                     int ligne = l;
                     int colonne = c;
@@ -89,6 +96,47 @@ namespace TranspireWpf
             double droite = (colonne == 8) ? 3 : 0.5;
             double bas = (ligne == 8) ? 3 : 0.5;
             return new Thickness(gauche, haut, droite, bas);
+        }
+
+        /// <summary>
+        /// Crée une mini-grille 3x3 affichant les choix possibles en vert.
+        /// </summary>
+        private Grid CreerGrilleChoix(int[] choix)
+        {
+            var miniGrid = new Grid { Margin = new Thickness(2) };
+
+            for (int i = 0; i < 3; i++)
+            {
+                miniGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                miniGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            }
+
+            for (int val = 1; val <= 9; val++)
+            {
+                if (!choix.Contains(val))
+                {
+                    continue;
+                }
+
+                int row = (val - 1) / 3;
+                int col = (val - 1) % 3;
+
+                var tb = new TextBlock
+                {
+                    Text = val.ToString(),
+                    FontSize = 9,
+                    FontWeight = FontWeights.Bold,
+                    Foreground = Brushes.SeaGreen,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+
+                Grid.SetRow(tb, row);
+                Grid.SetColumn(tb, col);
+                miniGrid.Children.Add(tb);
+            }
+
+            return miniGrid;
         }
     }
 }
