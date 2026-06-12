@@ -37,6 +37,7 @@ namespace TranspireWpf
 
             this.grille.Charger();
             CreerBoutonsValeurs();
+            MettreAJourMode();
             this.grille.Afficher();
         }
 
@@ -72,6 +73,8 @@ namespace TranspireWpf
         /// </summary>
         private void MettreAJourBoutons()
         {
+            Brush couleurActive = this.grille.Choix ? Brushes.SeaGreen : Brushes.CornflowerBlue;
+
             foreach (Button btn in PanneauValeurs.Children)
             {
                 if ((int)btn.Tag == this.grille.ValeurSelectionne)
@@ -94,11 +97,49 @@ namespace TranspireWpf
 
             if (this.grille.ValeurSelectionne != null)
             {
-                try { this.grille.MettreValeur(); }
-                catch (EGrilleValeurNulle) { }
+                if (this.grille.Choix)
+                {
+                    Case cas = this.grille.GetCase(ligne, colonne);
+                    if (!cas.Initiale && !cas.Affiche)
+                    {
+                        cas.Choisir(this.grille.ValeurSelectionne.Value);
+                    }
+                }
+                else
+                {
+                    try { this.grille.MettreValeur(); }
+                    catch (EGrilleValeurNulle) { }
+                }
             }
 
             this.grille.Afficher();
         }
+
+        /// <summary>
+        /// Met à jour le label du mode (Test = rouge, Choix = vert).
+        /// </summary>
+        private void MettreAJourMode()
+        {
+            if (this.grille.Choix)
+            {
+                LabelMode.Text = "Choix";
+                LabelMode.Foreground = Brushes.SeaGreen;
+            }
+            else
+            {
+                LabelMode.Text = "Test";
+                LabelMode.Foreground = Brushes.Red;
+            }
+        }
+
+        private void LabelMode_Click(object sender, MouseButtonEventArgs e)
+        {
+            this.grille.ChangerMode();
+            MettreAJourMode();
+            MettreAJourBoutons();
+            this.grille.Afficher();
+        }
+
+
     }
 }
