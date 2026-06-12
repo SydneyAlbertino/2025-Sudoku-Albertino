@@ -19,6 +19,7 @@ namespace Creator
             private int difficulte;
             private Random random = new Random();
             private int[,] grilleVide;
+            private int[,] solution;
 
 
             /// <summary>
@@ -41,6 +42,7 @@ namespace Creator
                 this.sousTaille = racine;
                 this.difficulte = difficulte;
                 this.grilleVide = new int[taille, taille];
+                this.solution = new int[taille, taille];
             }
 
             /// <summary>
@@ -67,6 +69,8 @@ namespace Creator
                             initiales[l, c] = true;
                         }
                     }
+
+                    this.solution = (int[,])this.grilleVide.Clone();
 
                     do
                     {
@@ -306,7 +310,7 @@ namespace Creator
                     for (int c = 0; c < this.taille; c++)
                     {
                         bool init = initiales[l, c] && grille[l, c] != 0;
-                        cases[l, c] = new Case(l, c, grille[l, c], init, init);
+                        cases[l, c] = new Case(l, c, solution[l, c], init, init);
                     }
                 }
                 return cases;
