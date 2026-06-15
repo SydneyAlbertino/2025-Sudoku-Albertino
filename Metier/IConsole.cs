@@ -9,5 +9,6 @@ namespace Metier
     public interface IConsole
     {
         public void AfficherGrille(Grille grille);
+        void AfficherFin(string message);
     }
 }

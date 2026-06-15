@@ -12,11 +12,13 @@ namespace TranspireConsole
         public void AfficherGrille(Grille grille)
         {
             Console.Clear();
+            Console.SetBufferSize(120, 40);
+            Console.SetWindowSize(120, 40);
 
             int curseurL = grille.Curseur.Ligne;
             int curseurC = grille.Curseur.Colonne;
 
-  
+
             EcrireLigneHorizontale(grille.Taille, 0, curseurL, curseurC, "top");
 
             for (int l = 0; l < grille.Taille; l++)
@@ -30,28 +32,55 @@ namespace TranspireConsole
                     bool estCurseur = l == curseurL && c == curseurC;
 
 
-                    if (estCurseur)
-                        Console.ForegroundColor = ConsoleColor.Red;
-                    else if (cas.Initiale)
-                        Console.ForegroundColor = ConsoleColor.Blue;
+                    if (cas.Affiche)
+                    {
+                        if (estCurseur)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                        }
+
+                        else
+                        {
+                            if (cas.Initiale)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Blue;
+                            }
+
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.White;
+                            }
+                        }
+
+                        string val = cas.Affiche ? cas.Valeur.ToString() : " ";
+                        Console.Write($" {val} ");
+                        Console.ResetColor();
+                    }
+
                     else
-                        Console.ForegroundColor = ConsoleColor.White;
+                    {
+                        if (cas.Choix.Length > 0)
+                        {
+                            string choixstr = string.Join(" ", cas.Choix).PadRight(3).Substring(0);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write(choixstr);
+                            Console.ResetColor();
+                        }
 
-                    string val = cas.Affiche ? cas.Valeur.ToString() : " ";
-                    Console.Write($" {val} ");
-                    Console.ResetColor();
-
-
+                        else
+                        {
+                            Console.Write("   ");
+                        }
+                    }
                     EcrireSepaVertical(l, c, curseurL, curseurC);
                 }
 
-                Console.WriteLine();
-
 
                 if (l < grille.Taille - 1)
+                {
                     EcrireLigneHorizontale(grille.Taille, l + 1, curseurL, curseurC, "mid");
+                }
             }
-
 
             EcrireLigneHorizontale(grille.Taille, grille.Taille, curseurL, curseurC, "bot");
 
@@ -60,13 +89,27 @@ namespace TranspireConsole
             for (int i = 1; i <= grille.Taille; i++)
             {
                 if (grille.ValeurSelectionne == i)
-                    Console.ForegroundColor = ConsoleColor.Red;
+                {
+                    Console.ForegroundColor = grille.Choix ? ConsoleColor.Green : ConsoleColor.Red;
+                }
+
                 else
+                {
                     Console.ForegroundColor = ConsoleColor.White;
+                }
 
                 Console.Write(i + " ");
                 Console.ResetColor();
             }
+            Console.Write("\nMode: ");
+            Console.ForegroundColor = grille.Choix ? ConsoleColor.Green : ConsoleColor.Red;
+            Console.WriteLine(grille.Choix ? "Choix" : "Test");
+            Console.ResetColor();
+
+            Console.Write("\nErreurs: ");
+            Console.ForegroundColor = grille.Erreur > 0 ? ConsoleColor.Red : ConsoleColor.White;
+            Console.Write($"{grille.Erreur}/3");
+            Console.ResetColor();
             Console.WriteLine();
         }
 
@@ -115,6 +158,32 @@ namespace TranspireConsole
             }
 
             Console.WriteLine(droite);
+        }
+
+        public void AfficherFin(string message)
+        {
+            Console.Clear();
+            int largeur = 50;
+
+            string bordure = new string('═', largeur - 2);
+            string vide = new string(' ', largeur - 2);
+
+            Console.ForegroundColor = message.Contains("Félicitations")
+                ? ConsoleColor.Green
+                : ConsoleColor.Red;
+
+            Console.WriteLine($"╔{bordure}╗");
+            Console.WriteLine($"║{vide}║");
+
+            string msgCentre = message.PadLeft((largeur - 2 + message.Length) / 2)
+                                      .PadRight(largeur - 2);
+            Console.WriteLine($"║{msgCentre}║");
+            Console.WriteLine($"║{vide}║");
+            Console.WriteLine($"╚{bordure}╝");
+
+            Console.ResetColor();
+            Console.WriteLine("\nAppuyez sur une touche pour quitter...");
+            Console.ReadKey(true);
         }
     }
 }

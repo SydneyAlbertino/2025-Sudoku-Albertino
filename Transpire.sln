@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMetier", "TestMetier\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranspireWpf", "TranspireWpf\TranspireWpf.csproj", "{9A4D6524-DBC8-4020-97EE-88D25600D411}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Creator", "Creator\Creator.csproj", "{09C180A1-996E-4617-9B9D-0B5E329D98A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test Creator", "Test Creator\Test Creator.csproj", "{6603D8A0-E26B-493D-B280-5396E11B950F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{9A4D6524-DBC8-4020-97EE-88D25600D411}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A4D6524-DBC8-4020-97EE-88D25600D411}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A4D6524-DBC8-4020-97EE-88D25600D411}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09C180A1-996E-4617-9B9D-0B5E329D98A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09C180A1-996E-4617-9B9D-0B5E329D98A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09C180A1-996E-4617-9B9D-0B5E329D98A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09C180A1-996E-4617-9B9D-0B5E329D98A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6603D8A0-E26B-493D-B280-5396E11B950F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6603D8A0-E26B-493D-B280-5396E11B950F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6603D8A0-E26B-493D-B280-5396E11B950F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6603D8A0-E26B-493D-B280-5396E11B950F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

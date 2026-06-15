@@ -60,5 +60,62 @@ namespace TestMetier
             c.Affiche = true;
             Assert.True(c.Affiche);
         }
+
+        [Fact]
+        public void Choix_VideAuDepart()
+        {
+            Case c = new Case(0, 0, 0, false, false);
+            Assert.Empty(c.Choix);
+        }
+
+        [Fact]
+        public void Choisir_AjouteValeur()
+        {
+            Case c = new Case(0, 0, 0, false, false);
+            c.Choisir(5);
+            Assert.Contains(5, c.Choix);
+        }
+
+        [Fact]
+        public void Choisir_EnleveValeurDejaPresente()
+        {
+            Case c = new Case(0, 0, 0, false, false);
+            c.Choisir(5);
+            c.Choisir(5);
+            Assert.DoesNotContain(5, c.Choix);
+        }
+
+        [Fact]
+        public void Choisir_PlusieursValeurs()
+        {
+            Case c = new Case(0, 0, 0, false, false);
+            c.Choisir(3);
+            c.Choisir(7);
+            c.Choisir(1);
+            Assert.Contains(3, c.Choix);
+            Assert.Contains(7, c.Choix);
+            Assert.Contains(1, c.Choix);
+        }
+
+        [Fact]
+        public void Choisir_ValeursTries()
+        {
+            Case c = new Case(0, 0, 0, false, false);
+            c.Choisir(7);
+            c.Choisir(2);
+            c.Choisir(5);
+            Assert.Equal(new int[] { 2, 5, 7 }, c.Choix);
+        }
+
+        [Fact]
+        public void Choisir_EnleveSeulementValeurCible()
+        {
+            Case c = new Case(0, 0, 0, false, false);
+            c.Choisir(2);
+            c.Choisir(5);
+            c.Choisir(7);
+            c.Choisir(5);
+            Assert.Equal(new int[] { 2, 7 }, c.Choix);
+        }
     }
 }
