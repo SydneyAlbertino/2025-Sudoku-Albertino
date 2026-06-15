@@ -145,16 +145,16 @@ namespace Metier
                     this.partieTerminee = true;
                     console.AfficherFin($"Félicitations ! Vous avez gagné avec {this.erreurs} erreur !");
                 }
+            }
 
-                else
+            else
+            {
+                this.erreurs = this.erreurs + 1;
+
+                if (this.erreurs >= 3)
                 {
-                    this.erreurs = this.erreurs + 1;
-
-                    if (this.erreurs >= 3)
-                    {
-                        this.partieTerminee = true;
-                        console.AfficherFin($"Perdu ! Vous avez fait {this.erreurs} erreurs. Trop nuulllllllllll");
-                    }
+                    this.partieTerminee = true;
+                    console.AfficherFin($"Perdu ! Vous avez fait {this.erreurs} erreurs. Trop nuulllllllllll");
                 }
             }
         }
