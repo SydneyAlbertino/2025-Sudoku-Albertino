@@ -12,6 +12,8 @@ namespace TranspireConsole
         public void AfficherGrille(Grille grille)
         {
             Console.Clear();
+            Console.SetBufferSize(120, 40);
+            Console.SetWindowSize(120, 40);
 
             int curseurL = grille.Curseur.Ligne;
             int curseurC = grille.Curseur.Colonne;
@@ -73,8 +75,6 @@ namespace TranspireConsole
                     EcrireSepaVertical(l, c, curseurL, curseurC);
                 }
 
-                Console.WriteLine();
-
 
                 if (l < grille.Taille - 1)
                 {
@@ -105,6 +105,12 @@ namespace TranspireConsole
             Console.ForegroundColor = grille.Choix ? ConsoleColor.Green : ConsoleColor.Red;
             Console.WriteLine(grille.Choix ? "Choix" : "Test");
             Console.ResetColor();
+
+            Console.Write("\nErreurs: ");
+            Console.ForegroundColor = grille.Erreur > 0 ? ConsoleColor.Red : ConsoleColor.White;
+            Console.Write($"{grille.Erreur}/3");
+            Console.ResetColor();
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -152,6 +158,32 @@ namespace TranspireConsole
             }
 
             Console.WriteLine(droite);
+        }
+
+        public void AfficherFin(string message)
+        {
+            Console.Clear();
+            int largeur = 50;
+
+            string bordure = new string('═', largeur - 2);
+            string vide = new string(' ', largeur - 2);
+
+            Console.ForegroundColor = message.Contains("Félicitations")
+                ? ConsoleColor.Green
+                : ConsoleColor.Red;
+
+            Console.WriteLine($"╔{bordure}╗");
+            Console.WriteLine($"║{vide}║");
+
+            string msgCentre = message.PadLeft((largeur - 2 + message.Length) / 2)
+                                      .PadRight(largeur - 2);
+            Console.WriteLine($"║{msgCentre}║");
+            Console.WriteLine($"║{vide}║");
+            Console.WriteLine($"╚{bordure}╝");
+
+            Console.ResetColor();
+            Console.WriteLine("\nAppuyez sur une touche pour quitter...");
+            Console.ReadKey(true);
         }
     }
 }
