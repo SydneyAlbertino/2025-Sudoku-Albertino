@@ -16,6 +16,8 @@ namespace Metier
         private int? valeurSelectionne;
         private Coordonnees curseur;
         private bool choix;
+        private int erreurs;
+        private bool partieTerminee;
 
         //Taille de la grille
         public int Taille { get { return taille; } }
@@ -39,6 +41,12 @@ namespace Metier
 
         //Indique la case ou on veut écrire
         public Coordonnees Curseur { get { return curseur; } set { curseur = value; } }
+
+        //Donne le nombre d'erreur de l'utilisateur
+        public int Erreur { get { return  erreurs; } }
+
+        //True si la partie est fini
+        public bool PartieTerminee {  get { return partieTerminee; } }
 
         /// <summary>
         /// Constructeur
@@ -116,14 +124,38 @@ namespace Metier
         public void MettreValeur()
         {
             if (this.valeurSelectionne == null)
+            {
                 throw new EGrilleValeurNulle("Aucune valeur sélectionnée.");
+            }
 
             Case c = GetCase(this.curseur.Ligne, this.curseur.Colonne);
 
-            if (!c.Initiale && c.Valeur == this.valeurSelectionne)
+            if (c.Initiale || c.Affiche)
+            {
+                return;
+            }
+
+            if (c.Valeur == this.valeurSelectionne)
             {
                 c.Affiche = true;
                 EnleverChoix();
+
+                if (EstPleine())
+                {
+                    this.partieTerminee = true;
+                    console.AfficherFin($"Félicitations ! Vous avez gagné avec {this.erreurs} erreur !");
+                }
+
+                else
+                {
+                    this.erreurs = this.erreurs + 1;
+
+                    if (this.erreurs >= 3)
+                    {
+                        this.partieTerminee = true;
+                        console.AfficherFin($"Perdu ! Vous avez fait {this.erreurs} erreurs. Trop nuulllllllllll");
+                    }
+                }
             }
         }
 
@@ -184,6 +216,25 @@ namespace Metier
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Indique si toutes les cases non initiales sont affichées.
+        /// </summary>
+        private bool EstPleine()
+        {
+            bool rep=true;
+            for (int l = 0; l < Taille; l++)
+            {
+                for (int c = 0; c < Taille; c++)
+                {
+                    if (!cases![l, c].Affiche)
+                    {
+                        rep= false;
+                    }
+                }
+            }
+            return rep;
         }
     }
 }
