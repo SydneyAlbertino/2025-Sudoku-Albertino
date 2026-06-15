@@ -6,7 +6,13 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <Copyright>Albertino Sydney</Copyright>
+    <ApplicationIcon>Mugiwara.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Mugiwara.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Metier\Metier.csproj" />
