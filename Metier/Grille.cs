@@ -15,11 +15,17 @@ namespace Metier
         private bool estCharge;
         private int? valeurSelectionne;
         private Coordonnees curseur;
+        private bool choix;
+        private int erreurs;
+        private bool partieTerminee;
 
         //Taille de la grille
         public int Taille { get { return taille; } }
         //Indique la valeur que l’ on veut écrire dans la grille
-        public int? ValeurSelectionne { get { return valeurSelectionne; }
+        public int? ValeurSelectionne 
+        { 
+            get { return valeurSelectionne; }
+
             set 
             {
                 if (value == null)
@@ -27,9 +33,20 @@ namespace Metier
                 if (value < 1 || value > Taille)
                     throw new EGrilleValeur($"Valeur {value} hors intervalle.");
                 valeurSelectionne = value;
-            } }
+            } 
+        }
+
+        //Indique si on est en mode choix ou en mode test
+        public bool Choix { get { return choix; } }
+
         //Indique la case ou on veut écrire
         public Coordonnees Curseur { get { return curseur; } set { curseur = value; } }
+
+        //Donne le nombre d'erreur de l'utilisateur
+        public int Erreur { get { return  erreurs; } }
+
+        //True si la partie est fini
+        public bool PartieTerminee {  get { return partieTerminee; } }
 
         /// <summary>
         /// Constructeur
@@ -40,9 +57,9 @@ namespace Metier
         /// <exception cref="EGrilleTaille">Si la taille différente de 9</exception>
         public Grille(int taille, IConsole console, IChargeur chargeur)
         {
-            if (taille != 9)
+            if (taille != 4 && taille != 9 && taille != 16)
             {
-                throw new EGrilleTaille("La taille doit être 9.");
+                throw new EGrilleTaille("La taille doit être 4, 9 ou 16.");
             }
 
             this.taille = taille;
@@ -50,6 +67,7 @@ namespace Metier
             this.chargeur = chargeur;
             this.estCharge = false;
             this.curseur = new Coordonnees(this.taille);
+            this.choix = false;
         }
 
 
@@ -106,14 +124,117 @@ namespace Metier
         public void MettreValeur()
         {
             if (this.valeurSelectionne == null)
+            {
                 throw new EGrilleValeurNulle("Aucune valeur sélectionnée.");
+            }
 
             Case c = GetCase(this.curseur.Ligne, this.curseur.Colonne);
 
-            if (!c.Initiale && c.Valeur == this.valeurSelectionne)
+            if (c.Initiale || c.Affiche)
+            {
+                return;
+            }
+
+            if (c.Valeur == this.valeurSelectionne)
             {
                 c.Affiche = true;
+                EnleverChoix();
+
+                if (EstPleine())
+                {
+                    this.partieTerminee = true;
+                    console.AfficherFin($"Félicitations ! Vous avez gagné avec {this.erreurs} erreur !");
+                }
             }
+
+            else
+            {
+                this.erreurs = this.erreurs + 1;
+
+                if (this.erreurs >= 3)
+                {
+                    this.partieTerminee = true;
+                    console.AfficherFin($"Perdu ! Vous avez fait {this.erreurs} erreurs. Trop nuulllllllllll");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Bascule entre le mode Test et le mode Choix.
+        /// </summary>
+        public void ChangerMode()
+        {
+            this.choix = !this.choix;
+        }
+
+        // <summary>
+        /// Supprime la valeur sélectionnée des choix
+        /// </summary>
+        public void EnleverChoix()
+        {
+            if (this.valeurSelectionne == null)
+            {
+                return;
+            }
+
+            int l = Curseur.Ligne;
+            int c = Curseur.Colonne;
+            int val = this.valeurSelectionne.Value;
+            int sous = (int)Math.Sqrt(Taille);
+
+            foreach (int v in this.cases![l, c].Choix.ToArray())
+            {
+                this.cases[l, c].Choisir(v);
+            }
+
+            for (int col = 0; col < Taille; col++)
+            {
+                if (this.cases[l, col].Choix.Contains(val))
+                {
+                    this.cases[l, col].Choisir(val);
+                }
+            }
+
+            for (int lig = 0; lig < Taille; lig++)
+            {
+                if (this.cases[lig, c].Choix.Contains(val))
+                {
+                    this.cases[lig, c].Choisir(val);
+                }
+            }
+
+            int debutLigne = (l / sous) * sous;
+            int debutColone = (c / sous) * sous;
+
+            for (int dl = debutLigne; dl < debutLigne + sous; dl++)
+            {
+                for (int dc = debutColone; dc < debutColone + sous; dc++)
+                {
+                    if (this.cases[dl, dc].Choix.Contains(val))
+                    { 
+                        this.cases[dl, dc].Choisir(val);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Indique si toutes les cases non initiales sont affichées.
+        /// </summary>
+        private bool EstPleine()
+        {
+            bool rep=true;
+            for (int l = 0; l < Taille; l++)
+            {
+                for (int c = 0; c < Taille; c++)
+                {
+                    if (!cases![l, c].Affiche)
+                    {
+                        rep= false;
+                    }
+                }
+            }
+            return rep;
         }
     }
 }

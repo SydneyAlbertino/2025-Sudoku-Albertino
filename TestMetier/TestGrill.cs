@@ -315,7 +315,7 @@ namespace TestMetier
         /// <summary>
         /// MettreValeur sur une case initiale : Affiche ne change pas
         /// </summary>
-        public void Grille_MettreValeur_CaseInitiale_AfficheInchange()
+        public void MettreValeur_CaseInitiale_AfficheInchange()
         {
             Grille g = new Grille(9, null, new ChargeurDefaut(9));
             g.Charger();
@@ -328,6 +328,100 @@ namespace TestMetier
             g.MettreValeur();
 
             Assert.Equal(avantMise, g.GetCase(0, 5).Affiche);
+        }
+
+        public void Choix_FalseAuDepart()
+        {
+            Grille g = new Grille(9, null, new ChargeurDefaut(9));
+            Assert.False(g.Choix);
+        }
+
+        [Fact]
+        public void ChangerMode_PasseEnModeChoix()
+        {
+            Grille g = new Grille(9, null, new ChargeurDefaut(9));
+            g.ChangerMode();
+            Assert.True(g.Choix);
+        }
+
+        [Fact]
+        public void ChangerMode_RetourneEnModeTest()
+        {
+            Grille g = new Grille(9, null, new ChargeurDefaut(9));
+            g.ChangerMode();
+            g.ChangerMode();
+            Assert.False(g.Choix);
+        }
+
+        private Grille CreerGrille(int curseurL, int curseurC, int valeur)
+        {
+            Grille g = new Grille(9, null, new ChargeurDefaut(9));
+            g.Charger();
+            g.Curseur.Ligne = curseurL;
+            g.Curseur.Colonne = curseurC;
+            g.ValeurSelectionne = valeur;
+            return g;
+        }
+
+        [Fact]
+        public void EnleverChoix_VideCaseCurseur()
+        {
+            Grille g = CreerGrille(4, 4, 3);
+
+            g.GetCase(4, 4).Choisir(3);
+            g.GetCase(4, 4).Choisir(7);
+
+            g.EnleverChoix();
+
+            Assert.Empty(g.GetCase(4, 4).Choix);
+        }
+
+        [Fact]
+        public void EnleverChoix_EnleveSurLigne()
+        {
+            Grille g = CreerGrille(4, 4, 3);
+
+            g.GetCase(4, 0).Choisir(3);
+            g.GetCase(4, 2).Choisir(3);
+            g.GetCase(4, 7).Choisir(3);
+
+            g.EnleverChoix();
+
+            Assert.DoesNotContain(3, g.GetCase(4, 0).Choix);
+            Assert.DoesNotContain(3, g.GetCase(4, 2).Choix);
+            Assert.DoesNotContain(3, g.GetCase(4, 7).Choix);
+        }
+
+        [Fact]
+        public void EnleverChoix_EnleveSurColonne()
+        {
+            Grille g = CreerGrille(4, 4, 3);
+
+            g.GetCase(0, 4).Choisir(3);
+            g.GetCase(2, 4).Choisir(3);
+            g.GetCase(8, 4).Choisir(3);
+
+            g.EnleverChoix();
+
+            Assert.DoesNotContain(3, g.GetCase(0, 4).Choix);
+            Assert.DoesNotContain(3, g.GetCase(2, 4).Choix);
+            Assert.DoesNotContain(3, g.GetCase(8, 4).Choix);
+        }
+
+        [Fact]
+        public void EnleverChoix_EnleveSurSousGrille()
+        {
+            Grille g = CreerGrille(4, 4, 3);
+
+            g.GetCase(3, 3).Choisir(3);
+            g.GetCase(3, 5).Choisir(3);
+            g.GetCase(5, 3).Choisir(3);
+
+            g.EnleverChoix();
+
+            Assert.DoesNotContain(3, g.GetCase(3, 3).Choix);
+            Assert.DoesNotContain(3, g.GetCase(3, 5).Choix);
+            Assert.DoesNotContain(3, g.GetCase(5, 3).Choix);
         }
     }
 }
